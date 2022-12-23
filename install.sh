@@ -26,10 +26,10 @@ if ! [ -x "$(command -v xwinwrap)" ]; then
     exit 1
 fi
 
-# Check if mplayer is installed
-if ! [ -x "$(command -v mplayer)" ]; then
-    echo "mplayer is not installed"
-    echo "You must install mplayer to use these scripts"
+# Check if mpv is installed
+if ! [ -x "$(command -v mpv)" ]; then
+    echo "mpv is not installed"
+    echo "You must install mpv to use these scripts"
     exit 1
 fi
 

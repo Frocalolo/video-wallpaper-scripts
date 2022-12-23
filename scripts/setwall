@@ -29,13 +29,13 @@ else
     args="-fs -ni -nf -b -un -ov -fdt"
 fi
 
-pkill -9 mplayer
+pkill -9 mpv
 pkill -9 gifview
 
 if [[ $(ls $HOME/.config/video-wallpapers/wallpapers | grep $var.mp4) ]]; then
-    # Use mplayer to play mp4 if current wallpaper is .mp4
+    # Use mpv to play mp4 if current wallpaper is .mp4
     sleep 0.01
-    xwinwrap $args -- mplayer -wid %WID -quiet -nosound $HOME/.config/video-wallpapers/wallpapers/$var.mp4 -loop 0 -nolirc -nomouseinput >/dev/null &
+    xwinwrap $args -- mpv -wid %WID -quiet --no-audio $HOME/.config/video-wallpapers/wallpapers/$var.mp4 -loop >/dev/null &
 else
     if [[ $(ls $HOME/.config/video-wallpapers/wallpapers | grep $var.gif) ]]; then
         # Use gifview to play gif if current wallpaper is .gif
