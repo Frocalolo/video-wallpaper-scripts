@@ -14,6 +14,7 @@ Tested working on Arch with:
 - i3
 - Herbstluftwm
 - Awesome
+- dwm
 
 Not tested on other distros and BSPWM
 
@@ -28,7 +29,7 @@ Not tested on other distros and BSPWM
 ## Dependencies
 
 - [xwinwrap-git](https://aur.archlinux.org/packages/xwinwrap-git/) (AUR)
-- mplayer
+- mpv
 - ffmpeg
 - gifsicle
 - xclip
