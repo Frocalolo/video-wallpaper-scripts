@@ -8,11 +8,14 @@ new=$(($var + 1)) # Increment the wallpaper number
 
 if [[ $1 != "startup" ]]; then
     # If the script is not called on startup, then increment the wallpaper number
-    if [[ $var -ge $wallpapernum ]]; then
-        echo 1 >$HOME/.config/video-wallpapers/wallpaperVar
+    if [[ $1 =~ ^[0-9]+$ ]] && [[ -f $HOME/.config/video-wallpapers/wallpapers/$1.mp4 || -f $HOME/.config/video-wallpapers/wallpapers/$1.gif ]]; then
+      var=$1
+    elif [[ $var -ge $wallpapernum ]]; then
+        var=1
     else
-        echo $new >$HOME/.config/video-wallpapers/wallpaperVar
+        var=$new
     fi
+    echo $var >$HOME/.config/video-wallpapers/wallpaperVar
 else
     var=$(($var - 1))
     if [ $var -eq 0 ]; then
