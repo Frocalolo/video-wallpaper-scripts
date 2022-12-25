@@ -142,7 +142,9 @@ Deletion and optimization works the same as with wallpaper engine.
 
 This script is used to cycle through wallpapers in `~/.config/video-wallpapers/wallpapers/` and set them as your wallpaper. It now supports mp4 and gif.
 
-Gif wallpapers are implemented using gifview and mp4 wallpapers are implemented using mplayer. I hope to implement html wallpapers in the future.
+If you want to set a specific video/gif in `~/.config/video-wallpapers/wallpapers/` as your wallpaper, add the corresponding number as an argument. (eg. to set 1.mp4 as the wallpaper, run `~/.config/video-wallpapers/setwall 1`)
+
+Gif wallpapers are implemented using gifview and mp4 wallpapers are implemented using mpv. I hope to implement html wallpapers in the future.
 
 Gifs must be optimized so that it is at your screen resolution, it will not auto stretch to your screen resolution!
 
@@ -173,8 +175,5 @@ Comment=Script to set wallpaper
 
 #### RAM consumption
 
-Base on my tests, mplayer only takes up less tha 300MB RAM. It should not cause significant slowdowns on your system.
+Based on my tests, mpv takes up less than 300MB RAM on a 1080p monitor and less than 600MB on 4k. It should not cause significant slowdowns on your system.
 
-#### Why not mpv?
-
-Mpv made my system slow down much more than mplayer, therefore i decided to use mplayer instead. You could try using mpv and see if it works better for you.
