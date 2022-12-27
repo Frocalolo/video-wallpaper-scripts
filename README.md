@@ -29,7 +29,7 @@ Not tested on other distros and BSPWM
 ## Dependencies
 
 - [xwinwrap-git](https://aur.archlinux.org/packages/xwinwrap-git/) (AUR)
-- mpv
+- mplayer/mpv
 - ffmpeg
 - gifsicle
 - xclip
@@ -145,7 +145,9 @@ This script is used to cycle through wallpapers in `~/.config/video-wallpapers/w
 
 If you want to set a specific video/gif in `~/.config/video-wallpapers/wallpapers/` as your wallpaper, add the corresponding number as an argument. (eg. to set 1.mp4 as the wallpaper, run `~/.config/video-wallpapers/setwall 1`)
 
-Gif wallpapers are implemented using gifview and mp4 wallpapers are implemented using mpv. I hope to implement html wallpapers in the future.
+Gif wallpapers are implemented using gifview and mp4 wallpapers are implemented using mplayer/mpv. I hope to implement html wallpapers in the future.
+
+Change the 'VIDEOPLAYER' variable in the script to change the video player used, default is mplayer. (e.g. mpv, mplayer)
 
 Gifs must be optimized so that it is at your screen resolution, it will not auto stretch to your screen resolution!
 
@@ -173,8 +175,3 @@ Comment=Script to set wallpaper
 ```
 
 ---
-
-#### RAM consumption
-
-Based on my tests, mpv takes up less than 300MB RAM on a 1080p monitor and less than 600MB on 4k. It should not cause significant slowdowns on your system.
-

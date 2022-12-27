@@ -2,20 +2,31 @@
 
 # Use xwinwrap-git from AUR (https://github.com/takase1121/xwinwrap)
 
+VIDEOPLAYER="mplayer" # mplayer or mpv
+
+GREEN='\033[0;32m'
+NC='\033[0m'
+
 var=$(cat $HOME/.config/video-wallpapers/wallpaperVar)
 wallpapernum=$(ls $HOME/.config/video-wallpapers/wallpapers | wc -l)
 new=$(($var + 1)) # Increment the wallpaper number
 
+# if current shell is gnome or cinnamon or herbstluftwm, set args=$(-fs -ni -nf -b -un -fdt)
+# else set args=$(-fs -ni -nf -b -un -ov -fdt)
+if [[ $(echo $XDG_SESSION_DESKTOP | grep -Eo 'gnome|cinnamon|herbstluftwm') ]]; then
+    args="-fs -ni -nf -b -un -fdt"
+else
+    args="-fs -ni -nf -b -un -ov -fdt"
+fi
+
+# Test startup arg
 if [[ $1 != "startup" ]]; then
     # If the script is not called on startup, then increment the wallpaper number
-    if [[ $1 =~ ^[0-9]+$ ]] && [[ -f $HOME/.config/video-wallpapers/wallpapers/$1.mp4 || -f $HOME/.config/video-wallpapers/wallpapers/$1.gif ]]; then
-      var=$1
-    elif [[ $var -ge $wallpapernum ]]; then
-        var=1
+    if [[ $var -ge $wallpapernum ]]; then
+        echo 1 >$HOME/.config/video-wallpapers/wallpaperVar
     else
-        var=$new
+        echo $new >$HOME/.config/video-wallpapers/wallpaperVar
     fi
-    echo $var >$HOME/.config/video-wallpapers/wallpaperVar
 else
     var=$(($var - 1))
     if [ $var -eq 0 ]; then
@@ -23,28 +34,38 @@ else
     fi
 fi
 
-# if current shell is gnome or cinnamon or herbstluftwm, set args=$(-fs -ni -nf -b -un -fdt)
-# else set args=$(-fs -ni -nf -b -un -ov -fdt)
+function setwall() {
+    if [[ $(ls $HOME/.config/video-wallpapers/wallpapers | grep $var.mp4) ]]; then
+        # Use mplayer/mpv to play mp4 if current wallpaper is .mp4
+        sleep 0.01
+        printf "$GREEN[INFO]$NC Setting wallpaper to $var.mp4\n"
+        xwinwrap $args -- $VIDEOPLAYER $videoargs >/dev/null &
+    else
+        if [[ $(ls $HOME/.config/video-wallpapers/wallpapers | grep $var.gif) ]]; then
+            # Use gifview to play gif if current wallpaper is .gif
+            sleep 0.01
+            printf "$GREEN[INFO]$NC Setting wallpaper to $var.gif\n"
+            xwinwrap $args -- gifview -w %WID $HOME/.config/video-wallpapers/wallpapers/$var.gif --geometry 2560x1440 -a >/dev/null &
+        fi
+    fi
+}
 
-if [[ $(echo $XDG_SESSION_DESKTOP | grep -Eo 'gnome|cinnamon|herbstluftwm') ]]; then
-    args="-fs -ni -nf -b -un -fdt"
-else
-    args="-fs -ni -nf -b -un -ov -fdt"
-fi
-
-pkill -9 mpv
+pkill -9 $VIDEOPLAYER
 pkill -9 gifview
 
-if [[ $(ls $HOME/.config/video-wallpapers/wallpapers | grep $var.mp4) ]]; then
-    # Use mpv to play mp4 if current wallpaper is .mp4
-    sleep 0.01
-    xwinwrap $args -- mpv -wid %WID -quiet --no-audio $HOME/.config/video-wallpapers/wallpapers/$var.mp4 -loop >/dev/null &
+if [[ $1 =~ ^[0-9]+$ ]] && [[ $(ls $HOME/.config/video-wallpapers/wallpapers | grep $1) ]]; then
+    var=$1
+    printf "$GREEN[MODE]$NC Direct\n"
 else
-    if [[ $(ls $HOME/.config/video-wallpapers/wallpapers | grep $var.gif) ]]; then
-        # Use gifview to play gif if current wallpaper is .gif
-        sleep 0.01
-        xwinwrap $args -- gifview -w %WID $HOME/.config/video-wallpapers/wallpapers/$var.gif --geometry 2560x1440 -a >/dev/null &
-    fi
+    printf "$GREEN[MODE]$NC Cycle\n"
 fi
+
+if [[ $VIDEOPLAYER == "mplayer" ]]; then
+    videoargs="-wid %WID -quiet -nosound $HOME/.config/video-wallpapers/wallpapers/$var.mp4 -loop 0 -nolirc -nomouseinput"
+else
+    videoargs="-wid %WID -quiet --no-audio $HOME/.config/video-wallpapers/wallpapers/$var.mp4 -loop"
+fi
+
+setwall
 
 #else if [[ $(ls $HOME/.config/video-wallpapers/wallpapers/$var | grep .html) ]] # implement html wallpaper
